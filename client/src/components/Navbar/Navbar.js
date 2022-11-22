@@ -8,18 +8,15 @@ const Navbar = () => {
 	const location = useLocation();
 	const dispatch = useDispatch();
 	const [user, setUser] = useState(JSON.parse(localStorage.getItem('profile')));
-
 	const handleLogout = () => {
 		dispatch( {type: LOGOUT} );
 		navigate('/');
 		setUser(null);
 	}
 	useEffect( () => {
-		const token = user?.token;
-
 		setUser(JSON.parse(localStorage.getItem('profile')));
 	}, [location]);
-
+	
     return (
 	<>
 	<div class="d-flex flex-column flex-shrink-0 p-3 border border-right border-primary" style={{width: "280px",height:"100vh", float:"left"}}>
@@ -76,10 +73,10 @@ const Navbar = () => {
 			</li>
 		</ul>
 		<div class="container">
-			{user?.result  ? (<div>
+			{user  ? (<div>
 				<Link to="/" class="d-flex align-items-center text-decoration-none">
-					<img src={user?.result.image} class="rounded-circle me-2" width="32" height="32"/>
-					<strong>{user.result.name}</strong>					
+					<img src={user?.image} class="rounded-circle me-2" width="32" height="32"/>
+					<strong>{user.name}</strong>					
 				</Link>
 				<button type="button" class="btn btn-danger mt-2" onClick={handleLogout}>Logout</button>
 				</div> ) : (

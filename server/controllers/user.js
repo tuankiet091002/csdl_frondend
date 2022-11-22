@@ -1,48 +1,64 @@
-import bcrypt from "bcryptjs";
-import jwt from "jsonwebtoken";
+const bcrypt = require('bcryptjs')
+const User = require('../models/User')
+const { StatusCodes } = require('http-status-codes')
+const { BadRequestError, NotFoundError } = require('../errors')
 
-import User from "../models/user.js";
+const getUsers  = async (req, res) => {
+  const { name , role } = req.query
+  const queryObject = {}
+  if (role) {
+    queryObject.role = role
+  }
+  if (name) {
+    queryObject.name = {$regex: name, $options: 'i'}
+  }
+  const users = await User.find(queryObject).select('-password -username -__v')
+  res.status(200).json({ users, nbHits: users.length })
 
-const secret = 'kietdeptrai';
+}
+const getSingleUser = async (req, res) => {
+  const {userID:id} = req.params
+  const user = await User.findOne({_id:id}).select('-password -username -__v')
+  if (!user) {
+    throw new NotFoundError(`No user with id : ${id}`);
+  }
+  res.status(StatusCodes.OK).json({user})
+}
 
-export const signin = async (req, res) => {
-  const { email, password } = req.body;
-
-  	try {
-		const oldUser = await User.findOne({ email });
-
-		if (!oldUser) return res.status(404).json({ message: "User doesn't exist" });
-
-		const isPasswordCorrect = await bcrypt.compare(password, oldUser.password);
-
-		if (!isPasswordCorrect) return res.status(400).json({ message: "Wrong password" });
-
-		const token = jwt.sign({ email: oldUser.email, id: oldUser._id }, secret, { expiresIn: "1h" });
-
-		res.status(200).json({ result: oldUser, token });
-		
-  	} catch (error) {
-
-    	res.status(500).json({ message: error.message });
-  	}
+const showCurrentUser = async (req, res) => {
+  res.status(StatusCodes.OK).json({ user: req.user });
 };
 
-export const signup = async (req, res) => {
-  	const { email, password, firstName, lastName } = req.body;
+const updateUserInfo = async (req, res) => {
+  const {userID:id} = req.params
+  const {username , password ,role , currentVehicle} = req.body
 
-  	try {
-		const oldUser = await User.findOne({ email });
+  if (username && req.user.role != 'admin' ){
+    throw new BadRequestError(`You don't have permission to change the username`)
+  }
+  if (role && req.user.role != 'admin'){
+    throw new BadRequestError(`You don't have permission to change the role`)
+  }
+  if (currentVehicle && req.user.role != 'admin' && req.user.role != 'backofficer'){
+    throw new BadRequestError(`You don't have permission to change user's vehicle`)
+  }
+  if (password){
+    if (req.user.role != 'admin' && req.user._id != id ){
+      throw new BadRequestError(`You don't have permission to change this account's password`)
+    }
+    const salt = await bcrypt.genSalt(10)
+    req.body.password = await bcrypt.hash(req.body.password, salt)
+  }
+  const user = await User.findOneAndUpdate({_id:id},req.body, {new: true, runValidators: true} )
+  if (!user) {
+    throw new NotFoundError(`No user with id : ${id}`);
+  }
+  res.status(StatusCodes.OK).json({user})
+}
 
-		if (oldUser) return res.status(400).json({ message: "User already exists" });
-
-		const hashedPassword = await bcrypt.hash(password, 12);
-
-		const result = await User.create({ email, password: hashedPassword, name: `${firstName} ${lastName}` });
-
-		const token = jwt.sign( { email: result.email, id: result._id }, secret, { expiresIn: "1h" } );
-
-		res.status(201).json({ result, token });
-  	} catch (error) {
-		res.status(500).json({ message: error.message });
-  	}
-};
+module.exports = {
+  getUsers,
+  getSingleUser,
+  updateUserInfo,
+  showCurrentUser
+}

@@ -1,9 +1,16 @@
-import express from "express";
-const router = express.Router();
+const express = require('express')
+const router = express.Router()
 
-import { signin, signup } from "../controllers/user.js";
 
-router.post("/signin", signin);
-router.post("/signup", signup);
+const {
+  getUsers,
+  getSingleUser,
+  updateUserInfo,
+  showCurrentUser
+} = require('../controllers/user.js')
 
-export default router;
+router.route('/showMe').get(showCurrentUser)
+router.route('/').get(getUsers)
+router.route('/:userID').get(getSingleUser).patch(updateUserInfo)
+
+module.exports = router
