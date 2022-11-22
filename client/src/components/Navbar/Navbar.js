@@ -30,10 +30,10 @@ const Navbar = () => {
 		<hr/>
 		<ul class="nav nav-pills flex-column mb-auto">
 			<li class="nav-item">
-				<a href="#" class="nav-link active">
-				<i class="bi bi-bar-chart me-3"></i>
-				<span>Tổng quan</span>
-				</a>
+				<Link to="/"  class="nav-link active">
+					<i class="bi bi-bar-chart me-3"></i>
+					<span>Tổng quan</span>
+				</Link>
 			</li>
 			<li>
 				<a href="#" class="nav-link ">
@@ -48,10 +48,10 @@ const Navbar = () => {
 				</a>
 			</li>
 			<li>
-				<a href="#" class="nav-link">
-				<i class="bi bi-map me-3"></i>
-				<span>Bản đồ</span>
-				</a>
+				<Link to="/map" class="nav-link">
+					<i class="bi bi-map me-3"></i>
+					<span>Bản đồ</span>
+				</Link>
 			</li>
 			<li>
 				<a href="#" class="nav-link">

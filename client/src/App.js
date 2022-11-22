@@ -6,7 +6,7 @@ import { GoogleOAuthProvider } from '@react-oauth/google';
 import Navbar from "./components/Navbar/Navbar.js"
 import Home from "./components/Home/Home.js"
 import Auth from './components/Auth/Auth.js';
-
+import Map from './components/Map/Map.js';
 const App = () => {
 	
     return (
@@ -20,6 +20,7 @@ const App = () => {
 					<Routes>
 						<Route exact path="/"  element={<Home />} />
 						<Route exact path="/auth" element={<Auth />} />
+						<Route exact path="/map" element ={<Map />} />
 					</Routes>
 				</div>
 			</div>

@@ -36,6 +36,10 @@ export const deleteEmp = async (req, res) => {
     if (!mongoose.Types.ObjectId.isValid(id)) 
         return res.status(404).send(`No post with id: ${id}`);
         
+    if (!req.userId )
+        return res.status(401).send("You are not authenticated");
+    if (!req.isAdmin)
+        return res.status(403).send("You are not authorized");
     await Employee.findByIdAndDelete(id);
     res.json({ message: "An Employee has been unexisted!"})
 }
