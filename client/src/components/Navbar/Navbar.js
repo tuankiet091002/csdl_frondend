@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
-import {LOGOUT} from '../../constants/actionTypes';
+import { logout } from "../../actions/authAction"
 
 const Navbar = () => {
 	const navigate = useNavigate();
@@ -9,7 +9,7 @@ const Navbar = () => {
 	const dispatch = useDispatch();
 	const [user, setUser] = useState(JSON.parse(localStorage.getItem('profile')));
 	const handleLogout = () => {
-		dispatch( {type: LOGOUT} );
+		dispatch( logout(navigate) );
 		navigate('/');
 		setUser(null);
 	}
