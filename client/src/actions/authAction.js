@@ -28,8 +28,8 @@ export const register = (formData, router) => async (dispatch) => {
 export const logout = (router) => async (dispatch) => {
 	try {
 	  	const {data} = await api.logout();
+		console.log('toi day ko')
 	  	dispatch({ type: LOGOUT, data });
-
 	  	router('/');
 	} catch (error) {
 	  console.log(error);

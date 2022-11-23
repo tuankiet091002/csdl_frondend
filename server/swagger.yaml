@@ -1,0 +1,642 @@
+openapi: 3.0.0
+info:
+  title: UWC2.0
+  contact: {}
+  version: '1.0'
+servers:
+  - url: https://uwc2.onrender.com/api/v1
+    variables: {}
+paths:
+  /auth/register:
+    post:
+      tags:
+        - Auth
+      summary: Register
+      description: Only admin can register account
+      operationId: Register
+      parameters: []
+      requestBody:
+        description: ''
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: '#/components/schemas/RegisterRequest'
+                - example:
+                    name: abc
+                    username: janitor123
+                    password: password
+                    role: janitor
+            example:
+              name: abc
+              username: janitor123
+              password: password
+              role: janitor
+        required: true
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+      security: []
+  /auth/login:
+    post:
+      tags:
+        - Auth
+      summary: Login
+      operationId: Login
+      parameters: []
+      requestBody:
+        description: ''
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: '#/components/schemas/LoginRequest'
+                - example:
+                    username: admin
+                    password: admin
+            example:
+              username: admin
+              password: admin
+        required: true
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+  /auth/logout:
+    get:
+      tags:
+        - Auth
+      summary: Logout
+      operationId: Logout
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+  /user/{userID}:
+    patch:
+      tags:
+        - User
+      summary: Update User Info
+      operationId: UpdateUserInfo
+      parameters:
+        - name: userID
+          in: path
+          description: ''
+          required: true
+          style: simple
+          schema:
+            type: string
+            example: 637b6cd16f10017c51fbe7aa
+      requestBody:
+        description: Only admin can update username and role.  Users can update their own password . Backofficer can update current vehicle
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: '#/components/schemas/UpdateUserInfoRequest'
+                - description: Only admin can update username and role.  Users can update their own password . Backofficer can update current vehicle
+                  example:
+                    username: abc
+                    password: password
+                    role: admin
+                    currentVehicle: 100
+            example:
+              username: abc
+              password: password
+              role: admin
+              currentVehicle: 100
+        required: true
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+    get:
+      tags:
+        - User
+      summary: Get Single User
+      description: Show detail of a user
+      operationId: GetSingleUser
+      parameters:
+        - name: userID
+          in: path
+          description: ''
+          required: true
+          style: simple
+          schema:
+            type: string
+            example: 63777e134e1859537c9623f7
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+  /user:
+    get:
+      tags:
+        - User
+      summary: Get Users
+      description: Any one can access
+      operationId: GetUsers
+      parameters:
+        - name: role
+          in: query
+          description: admin || backofficer ||collector || janitor
+          style: form
+          explode: true
+          schema:
+            type: string
+            example: admin
+        - name: name
+          in: query
+          description: Search for the name of user ( even a part of the name)
+          style: form
+          explode: true
+          schema:
+            type: string
+            example: a
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+  /user/showMe:
+    get:
+      tags:
+        - User
+      summary: Get Current User
+      description: Show the current login account
+      operationId: GetCurrentUser
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+  /mcp:
+    post:
+      tags:
+        - MCP
+      summary: Create MCP
+      description: Only for admin , backofficer
+      operationId: CreateMCP
+      parameters: []
+      requestBody:
+        description: ''
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: '#/components/schemas/CreateMCPRequest'
+                - example:
+                    address: rel
+                    capacity: 10
+                    status: full
+                    currentLoad: 7
+            example:
+              address: rel
+              capacity: 10
+              status: full
+              currentLoad: 7
+        required: true
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+    get:
+      tags:
+        - MCP
+      summary: Get All MCPs
+      operationId: GetAllMCPs
+      parameters:
+        - name: numericFilters
+          in: query
+          description: '> < >= <='
+          style: form
+          explode: true
+          schema:
+            type: string
+            example: currentLoad>=1,currentLoad<=6
+        - name: status
+          in: query
+          description: empty , not-empty , full
+          style: form
+          explode: true
+          schema:
+            type: string
+            example: status=full
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+  /mcp/{MCP_ID}:
+    get:
+      tags:
+        - MCP
+      summary: Get Single MCP
+      operationId: GetSingleMCP
+      parameters:
+        - name: MCP_ID
+          in: path
+          description: ''
+          required: true
+          style: simple
+          schema:
+            type: string
+            example: 'null'
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+    patch:
+      tags:
+        - MCP
+      summary: Update MCP
+      operationId: UpdateMCP
+      parameters:
+        - name: MCP_ID
+          in: path
+          description: ''
+          required: true
+          style: simple
+          schema:
+            type: string
+            example: 6379fab2802ec67529941b55
+      requestBody:
+        description: Everyone can update currentLoad. Updating capacity is not available
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: '#/components/schemas/UpdateMCPRequest'
+                - description: Everyone can update currentLoad. Updating capacity is not available
+                  example:
+                    currentLoad: 7
+            example:
+              currentLoad: 7
+        required: true
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+    delete:
+      tags:
+        - MCP
+      summary: Delete MCP
+      description: Only for admin , backofficer
+      operationId: DeleteMCP
+      parameters:
+        - name: MCP_ID
+          in: path
+          description: ''
+          required: true
+          style: simple
+          schema:
+            type: string
+            example: 6378c48acfeb1d2b4b738f3e
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+  /tasks:
+    post:
+      tags:
+        - Task
+      summary: Create Task
+      operationId: CreateTask
+      parameters: []
+      requestBody:
+        description: ''
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: '#/components/schemas/CreateTaskRequest'
+                - example:
+                    employee: 637b6cd16f10017c51fbe7aa
+                    workingRange:
+                      - 6378c4ae97111179c86779c3
+                    workLoad: 10
+                    shift: 4
+                    date: '2022-11-23'
+            example:
+              employee: 637b6cd16f10017c51fbe7aa
+              workingRange:
+                - 6378c4ae97111179c86779c3
+              workLoad: 10
+              shift: 4
+              date: '2022-11-23'
+        required: true
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+    get:
+      tags:
+        - Task
+      summary: Get All Tasks
+      description: |-
+        Query url supports multivalue .
+        Only backofficer and admin can access this
+      operationId: GetAllTasks
+      parameters:
+        - name: employee
+          in: query
+          description: ''
+          style: form
+          explode: true
+          schema:
+            type: string
+            example: ID_employee
+        - name: shift
+          in: query
+          description: ''
+          style: form
+          explode: true
+          schema:
+            type: integer
+            format: int32
+        - name: date
+          in: query
+          description: ''
+          style: form
+          explode: true
+          schema:
+            type: string
+            example: '2022-11-22'
+        - name: state
+          in: query
+          description: ''
+          style: form
+          explode: true
+          schema:
+            type: string
+            example: completed
+        - name: opposite
+          in: query
+          description: ''
+          style: form
+          explode: true
+          schema:
+            type: boolean
+            example: true
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+  /tasks/myTasks:
+    get:
+      tags:
+        - Task
+      summary: Get My Tasks
+      description: |-
+        Get My Task is similar to Get All Tasks but not having employee and opposite field.
+        Janitor and Collector can see their tasks
+      operationId: GetMyTasks
+      parameters:
+        - name: shift
+          in: query
+          description: ''
+          style: form
+          explode: true
+          schema:
+            type: string
+            example: 2,3
+        - name: date
+          in: query
+          description: ''
+          style: form
+          explode: true
+          schema:
+            type: string
+            example: '2022-11-23'
+        - name: state
+          in: query
+          description: ''
+          style: form
+          explode: true
+          schema:
+            type: string
+            example: uncompleted
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+  /tasks/{taskID}:
+    get:
+      tags:
+        - Task
+      summary: Get Single Task
+      operationId: GetSingleTask
+      parameters:
+        - name: taskID
+          in: path
+          description: ''
+          required: true
+          style: simple
+          schema:
+            type: string
+            example: 'null'
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+    patch:
+      tags:
+        - Task
+      summary: Update Task
+      description: |-
+        Updating checkin or checkout ( for user ) and workLoad ( for admin or backofficer )
+        Only user doing their task can access this (updating their task)
+      operationId: UpdateTask
+      parameters:
+        - name: taskID
+          in: path
+          description: ''
+          required: true
+          style: simple
+          schema:
+            type: string
+            example: task_ID
+      requestBody:
+        description: ''
+        content:
+          text/plain:
+            schema:
+              type: string
+              example: |-
+                {
+                "workLoad": 100,
+                 "checkIn" : any value,
+                "checkOut: any value,
+                }
+            example: |-
+              {
+              "workLoad": 100,
+               "checkIn" : any value,
+              "checkOut: any value,
+              }
+        required: true
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+    delete:
+      tags:
+        - Task
+      summary: Delete Task
+      operationId: DeleteTask
+      parameters:
+        - name: taskID
+          in: path
+          description: ''
+          required: true
+          style: simple
+          schema:
+            type: string
+            example: taskID
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+components:
+  schemas:
+    LoginRequest:
+      title: LoginRequest
+      required:
+        - username
+        - password
+      type: object
+      properties:
+        username:
+          type: string
+        password:
+          type: string
+      example:
+        username: sukuna
+        password: password
+    RegisterRequest:
+      title: RegisterRequest
+      required:
+        - name
+        - username
+        - password
+        - role
+      type: object
+      properties:
+        name:
+          type: string
+        username:
+          type: string
+        password:
+          type: string
+        role:
+          type: string
+      example:
+        name: abc
+        username: janitor123
+        password: password
+        role: janitor
+    CreateMCPRequest:
+      title: CreateMCPRequest
+      required:
+        - address
+        - capacity
+        - status
+        - currentLoad
+      type: object
+      properties:
+        address:
+          type: string
+        capacity:
+          type: integer
+          format: int32
+        status:
+          type: string
+        currentLoad:
+          type: integer
+          format: int32
+      example:
+        address: rel
+        capacity: 10
+        status: full
+        currentLoad: 7
+    UpdateUserInfoRequest:
+      title: UpdateUserInfoRequest
+      required:
+        - currentVehicle
+      type: object
+      properties:
+        currentVehicle:
+          type: integer
+          format: int32
+      example:
+        currentVehicle: 100
+    UpdateMCPRequest:
+      title: UpdateMCPRequest
+      required:
+        - currentLoad
+      type: object
+      properties:
+        currentLoad:
+          type: integer
+          format: int32
+      example:
+        currentLoad: 7
+    CreateTaskRequest:
+      title: CreateTaskRequest
+      required:
+        - employee
+        - workingRange
+        - workLoad
+        - shift
+        - date
+      type: object
+      properties:
+        employee:
+          type: string
+        workingRange:
+          type: array
+          items:
+            type: string
+          description: ''
+        workLoad:
+          type: integer
+          format: int32
+        shift:
+          type: integer
+          format: int32
+        date:
+          type: string
+      example:
+        employee: 637b6cd16f10017c51fbe7aa
+        workingRange:
+          - 6378c4ae97111179c86779c3
+        workLoad: 10
+        shift: 4
+        date: '2022-11-23'
+tags:
+  - name: Auth
+    description: ''
+  - name: User
+    description: ''
+  - name: MCP
+    description: ''
+  - name: Task
+    description: ''

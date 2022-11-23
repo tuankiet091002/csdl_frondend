@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { GoogleLogin } from '@react-oauth/google';
 import jwt_decode from 'jwt-decode';
 
 import { login, register } from "../../actions/authAction"
@@ -23,16 +22,6 @@ const Auth = () => {
 
     const handleChange = (e) => {
         setForm({ ...form, [e.target.name]: e.target.value || e.value });
-    }
-    const handleGoogleSuccess = async (res) => {
-        const userObj = jwt_decode(res.credential);
-        const basic = { name: userObj.name, image: userObj.picture, username:userObj.email, sub: userObj.sub}
-        try {
-            dispatch({ type: AUTH, data: { result: basic, token: res.credential } });
-            navigate('/');
-        } catch (error) {
-            console.log(error);
-        }
     }
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -72,14 +61,6 @@ const Auth = () => {
         </div>)
         }
         <hr/>
-        
-        <GoogleLogin
-            onSuccess={handleGoogleSuccess}
-            onError={() => {
-                console.log('Login Failed');
-            }}
-        /> <br/>
-        
         <button type="submit" class="btn btn-primary me-4">{isSignup ? 'Sign Up' : 'Sign In'}</button>
         <button type="button" class="btn btn-secondary" onClick={switchMode}>
             { isSignup ? 'Already have an account? Sign in' : "Don't have an account? Sign Up" }
