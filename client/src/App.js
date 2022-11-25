@@ -7,6 +7,8 @@ import Navbar from "./components/Navbar/Navbar.js"
 import Home from "./components/Home/Home.js"
 import Auth from './components/Auth/Auth.js';
 import Map from './components/Map/Map.js';
+import Employees from './components/Employees/Employees.js';
+
 const App = () => {
 	
     return (
@@ -20,6 +22,9 @@ const App = () => {
 					<Routes>
 						<Route exact path="/"  element={<Home />} />
 						<Route exact path="/auth" element={<Auth />} />
+						<Route exact path="/emps" element ={<Employees />} />
+						<Route exact path="/vehs" element ={<Map />} />
+						<Route exact path="/mcps" element ={<Map />} />
 						<Route exact path="/map" element ={<Map />} />
 					</Routes>
 				</div>

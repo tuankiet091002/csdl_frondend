@@ -12,7 +12,7 @@ const EmpForm = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        dispatch(createEmp(empData));
+        dispatch();
         clear();
     }
 
@@ -25,22 +25,22 @@ const EmpForm = () => {
         <h1>Employee Form</h1>
         <form autoComplete='off' onSubmit={handleSubmit} style={{width:"50vw"}}>
             <div class="form-group">
-                <label for="exampleName">Name</label>
+                <label htmlFor="exampleName">Name</label>
                 <input type="text" class="form-control" id="exampleName" 
                 value={empData.fname} onChange={(e) => setEmpData({ ...empData, fname: e.target.value })}/>
             </div>
             <div class="form-group">
-                <label for="exampleMail">Email</label>
+                <label htmlFor="exampleMail">Email</label>
                 <input type="email" class="form-control" id="exampleMail"
                 value={empData.email} onChange={(e) => setEmpData({ ...empData, email: e.target.value })}/>
             </div>
             <div class="form-group">
-                <label for="exampleAdd">Address</label>
+                <label htmlFor="exampleAdd">Address</label>
                 <input type="text" class="form-control" id="exampleAdd"
                 value={empData.address} onChange={(e) => setEmpData({ ...empData, address: e.target.value })}/>
             </div>
             <div class="form-group">
-                <label for="exampleID">ID</label>
+                <label htmlFor="exampleID">ID</label>
                 <input type="text" class="form-control" id="exampleID"
                 value={empData.id} onChange={(e) => setEmpData({ ...empData, id: e.target.value })}/>
             </div>

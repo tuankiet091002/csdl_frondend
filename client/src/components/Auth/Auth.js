@@ -37,21 +37,21 @@ const Auth = () => {
         <h1>{ isSignup ? 'Sign Up': 'Sign In' }</h1>
         {   isSignup && (
             <div class="form-group">
-            <label for="#fname">Name</label>
+            <label htmlFor="#fname">Name</label>
             <input type="text" id="fname" class="form-control" name="name" onChange={handleChange}/>
             </div>
         )
         }
         <div class="form-group">
-            <label for="#username">Username</label>
+            <label htmlFor="#username">Username</label>
             <input type="text" id="usernme" class="form-control" name="username" onChange={handleChange}/>
         </div>
         <div class="form-group">
-            <label for="#pass">Password</label>
+            <label htmlFor="#pass">Password</label>
             <input type="password" id="class" class="form-control" name="password" onChange={handleChange}/>
         </div>
         { isSignup && (<div class="form-group">
-            <label for="role">Role</label>
+            <label htmlFor="role">Role</label>
             <select class="form-control" id="role" name = "role" onChange={handleChange}>
                 <option value="janitor">Janitor</option>
                 <option value="collector">Collector</option>

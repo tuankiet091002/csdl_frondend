@@ -32,10 +32,17 @@ const Navbar = () => {
 				</Link>
 			</li>
 			<li>
-				<a href="#" class="nav-link ">
-				<i class="bi bi-briefcase me-3"></i>
-				<span>Thiết bị</span>
-				</a>
+				<button class="btn btn-toggle align-items-center rounded collapsed text-primary" data-bs-toggle="collapse" data-bs-target="#stuff-collapse">
+					<i class="bi bi-briefcase me-3"></i>
+					<span>Thiết bị</span>
+				</button>
+				<div id="stuff-collapse" class="collapse text-primary">
+					<ul class="btn-toggle-nav list-unstyled pb-1 ms-5">
+						<li><Link to="/emps">Nhân viên</Link></li>
+						<li><Link to="/vehs">Phương tiện</Link></li>
+						<li><Link to="/mcps">MCP</Link></li>
+					</ul>
+				</div>
 			</li>
 			<li>
 				<a href="#" class="nav-link ">
@@ -72,12 +79,20 @@ const Navbar = () => {
 			</li>
 		</ul>
 		<div class="container">
-			{user  ? (<div>
-				<Link to="/" class="d-flex align-items-center text-decoration-none">
+			{user  ? (<div class="dropdown">
+				<div class="d-flex align-items-center text-decoration-none dropdown-toggle show" data-bs-toggle="dropdown">
 					<img src={user?.image} class="rounded-circle me-2" width="32" height="32"/>
 					<strong>{user.name}</strong>					
-				</Link>
-				<button type="button" class="btn btn-danger mt-2" onClick={handleLogout}>Logout</button>
+				</div>
+				<ul class="dropdown-menu text-small shadow">
+					<li class="dropdown-item">
+						<Link to="/auth" class="text-decoration-none">Change account</Link>
+					</li>
+					<li>
+						<hr class="dropdown-divider"></hr>
+					</li>
+					<li class="dropdown-item" onClick={handleLogout}>Logout</li>
+				</ul>
 				</div> ) : (
 				<Link to="/auth">
 					<button class="btn btn-primary" role="button">Sign In</button>
