@@ -1,14 +1,14 @@
-import { FETCH_ALL, DELETE, FETCH_BY_SEARCH} from '../constants/actionTypes';
+import { DELETE, FETCH_BY_SEARCH, FETCH_ALL} from '../constants/actionTypes';
 
-export default (emps = [], action) => {
+export default (state = {emps: []}, action) => {
 	switch (action.type) {
 		case FETCH_ALL:
-			return action.payload.users;
+			return {...state, emps: action.payload.trainees};
 		case DELETE:
-			return emps.filter((emp) => emp._id !== action.payload);
+			return {...state, emps: state.emps.filter((emp) => emp._id !== action.payload)};
 		case FETCH_BY_SEARCH:
-			return action.payload.users;
+			return {...state, emps: action.payload.trainees};
 		default:
-			return emps;
+			return state;
 	}
 };

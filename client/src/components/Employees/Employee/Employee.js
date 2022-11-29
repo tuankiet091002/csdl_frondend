@@ -10,13 +10,15 @@ const Employee = ({emp}) => {
     }
 
     return (
-    <>
-        <li class="list-group-item">
-            Tên: {emp.name}     Role: {emp.role}
-            <button class="btn btn-danger btn-sm ml-auto" type="button" onClick={handleDelete} style={{float: "right"}}>
-            <i class="bi bi-trash"></i></button>
-        </li>
-    </>)
+    <tr>
+        <td>{emp.COMPANY_ID}</td>
+        <td>{emp.DOB}</td>
+        <td>{emp.SSN}</td>
+        <td>{emp.PHOTO}</td>
+    </tr>
+    )
 };
+
+
 
 export default Employee;

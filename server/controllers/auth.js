@@ -1,59 +1,39 @@
-const User = require('../models/User')
 const { StatusCodes } = require('http-status-codes')
 const { BadRequestError, UnauthenticatedError } = require('../errors/index')
-const { attachCookiesToResponse, createPayloadToken } = require('../utils')
+const { attachCookiesToResponse} = require('../utils/jwt')
+const bcrypt = require('bcryptjs');
 
-const register = async (req, res) => {
-	const { name, username, password ,role} = req.body;
-	const usernameAlreadyExists = await User.findOne({ username });
-	if (usernameAlreadyExists) {
-		throw new BadRequestError('Username already exists');
-	}
-	// first registered user is an admin
-	try {
-		const user = await User.create({ name, username, password, role });
-		const tokenUser = createPayloadToken(user);
-		attachCookiesToResponse({ res, user: tokenUser });
-		res.status(StatusCodes.CREATED).json({ user: tokenUser });
-		
-	} catch (error) {
-		throw error
-	}
-}
 
 const login = async (req, res) => {
-	const { username, password } = req.body;
+  const { username, password } = req.body;
 
-	if (!username || !password) {
-		throw new BadRequestError('Please provide username and password');
-	}
-	const user = await User.findOne({ username });
+  if (!username || !password) {
+    throw new BadRequestError('Please provide username and password');
+  }
 
-	if (!user) {
-		throw new UnauthenticatedError('Invalid Credentials');
-	}
-	const isPasswordCorrect = await user.comparePassword(password);
-	if (!isPasswordCorrect) {
-		throw new UnauthenticatedError('Invalid Credentials');
-	}
-	const tokenUser = createPayloadToken(user);
-	attachCookiesToResponse({ res, user: tokenUser });
+  if ( username != process.env.USER){
+    console.log(process.env.USER);
+    throw new UnauthenticatedError('Username or Password is wrong 1');
+  }
+  const isPasswordCorrect = await bcrypt.compare(password, process.env.PASSWORD);
+  if (!isPasswordCorrect) {
+    throw new UnauthenticatedError('Username or Password is wrong');
+  }
+  
+  attachCookiesToResponse({ res, user: {id:12345678 , role:'admin'} });
 
-	res.status(StatusCodes.OK).json({ user: tokenUser });
+  res.status(StatusCodes.OK).json({ msg: 'Login successful!' ,user: {id:12345678 , role:'admin'} });
 };
 
 const logout = async (req, res) => {
-	res.cookie('token', 'logout', {
-		expires: new Date(Date.now() + 1000),
-		sameSite: "None", 
-      	secure: true,      
-      	httpOnly: false
-	});
-	res.status(StatusCodes.OK).json({ msg: 'User logged out!' });
+  res.cookie('token', 'logout', {
+    httpOnly: true,
+    expires: new Date(Date.now() + 1000),
+  });
+  res.status(StatusCodes.OK).json({ msg: 'User logged out!' });
 };
 
 module.exports = {
-  register,
   login,
   logout,
 };

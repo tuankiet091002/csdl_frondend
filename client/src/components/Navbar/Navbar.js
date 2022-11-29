@@ -2,10 +2,10 @@ import React, { useState, useEffect } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { logout } from "../../actions/authAction"
-
 const Navbar = () => {
 	const navigate = useNavigate();
 	const location = useLocation();
+	const path = location.pathname;
 	const dispatch = useDispatch();
 	const [user, setUser] = useState(JSON.parse(localStorage.getItem('profile')));
 	const handleLogout = () => {
@@ -21,46 +21,15 @@ const Navbar = () => {
 	<div class="d-flex flex-column flex-shrink-0 p-3 border border-right border-primary" style={{width: "280px",height:"100vh", float:"left"}}>
 		<a href="/" class="navbar-brand d-flex align-items-center mb-3 mb-md-0 me-md-auto fs-2">
 			<i class="bi bi-truck me-1 text-primary"></i>
-			<span>UWC Remake</span>
+			<span>Gì đó</span>
 		</a>
 		<hr/>
 		<ul class="nav nav-pills flex-column mb-auto">
 			<li class="nav-item">
-				<Link to="/"  class="nav-link active">
+				<Link to="/emps"  class={path=="/emps" ? "nav-link active" : "nav-link"}>
 					<i class="bi bi-bar-chart me-3"></i>
 					<span>Tổng quan</span>
 				</Link>
-			</li>
-			<li>
-				<button class="btn btn-toggle align-items-center rounded collapsed text-primary" data-bs-toggle="collapse" data-bs-target="#stuff-collapse">
-					<i class="bi bi-briefcase me-3"></i>
-					<span>Thiết bị</span>
-				</button>
-				<div id="stuff-collapse" class="collapse text-primary">
-					<ul class="btn-toggle-nav list-unstyled pb-1 ms-5">
-						<li><Link to="/emps">Nhân viên</Link></li>
-						<li><Link to="/vehs">Phương tiện</Link></li>
-						<li><Link to="/mcps">MCP</Link></li>
-					</ul>
-				</div>
-			</li>
-			<li>
-				<a href="#" class="nav-link ">
-				<i class="bi bi-person me-3"></i>
-				<span>Phân công</span>
-				</a>
-			</li>
-			<li>
-				<Link to="/map" class="nav-link">
-					<i class="bi bi-map me-3"></i>
-					<span>Bản đồ</span>
-				</Link>
-			</li>
-			<li>
-				<a href="#" class="nav-link">
-				<i class="bi bi-chat-right-text me-3"></i>
-				Tin nhắn
-				</a>
 			</li>
 		</ul>
 		<hr/>

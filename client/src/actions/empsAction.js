@@ -4,6 +4,7 @@ import * as api from '../api/index.js';
 export const getEmps = () => async (dispatch) => {
 	try {
 		const { data } = await api.fetchEmps();
+        console.log('dsada',data)
 		dispatch({ type: FETCH_ALL, payload: data });
 		
 	} catch (error) {
