@@ -1,48 +1,78 @@
 
 import React, {useState} from 'react';
 import { useDispatch } from 'react-redux';
-import { createEmp } from "../../../actions/empsAction"
+import {createTrainee} from "../../../actions/trnsAction";
 
-const EmpForm = () => {
-    const [empData, setEmpData] = useState({
-        fname:'', email:'', address:'', id: '',
-    })
-
+const TraineeForm = ({closeForm}) => {    
     const dispatch = useDispatch();
 
+    const initialState = {SSN: '', Fname: '', Lname: '', address: '', 
+                        phone: '', DoB: '', photo: '', company_ID: ''}
+    const [formData, setForm] = useState(initialState);
+    
+    
     const handleSubmit = (e) => {
         e.preventDefault();
-        dispatch();
+        const t = new Date(formData.DoB);
+        dispatch(createTrainee({...formData, DoB: t.toLocaleDateString('vi-VN')}));
         clear();
+        closeForm();
+        
+    }
+
+    const handleChange = (e) => {
+        setForm({...formData, [e.target.name]: e.target.value});
     }
 
     const clear = () => {
-        setEmpData({fname:'', email:'', address:'', id: ''});
+        setForm(initialState);
     };
 
     return (
     <>
-        <h1>Employee Form</h1>
-        <form autoComplete='off' onSubmit={handleSubmit} style={{width:"50vw"}}>
+        <p class="h1 text-center">Add Trainee</p>
+        <form autoComplete='off' onSubmit={handleSubmit}>
             <div class="form-group">
-                <label htmlFor="exampleName">Name</label>
-                <input type="text" class="form-control" id="exampleName" 
-                value={empData.fname} onChange={(e) => setEmpData({ ...empData, fname: e.target.value })}/>
+                <label htmlFor="ssn">SSN</label>
+                <input type="text" class="form-control" id="ssn" 
+                name="SSN" value={formData.SSN} onChange={handleChange}/>
+            </div>
+            <div class="row">
+                <div class="form-group col-6">
+                    <label htmlFor="fname">First Name</label>
+                    <input type="text" class="form-control" id="fname" 
+                    name="Fname" value={formData.Fname} onChange={handleChange}/>
+                </div>
+                <div class="form-group col-6">
+                <label htmlFor="lname">Last Name</label>
+                    <input type="text" class="form-control col" id="lname" 
+                    name="Lname" value={formData.Lname} onChange={handleChange}/>
+                </div>  
             </div>
             <div class="form-group">
-                <label htmlFor="exampleMail">Email</label>
-                <input type="email" class="form-control" id="exampleMail"
-                value={empData.email} onChange={(e) => setEmpData({ ...empData, email: e.target.value })}/>
+                <label htmlFor="ssn">Address</label>
+                <input type="text" class="form-control" id="address" 
+                name="address" value={formData.address} onChange={handleChange}/>
             </div>
             <div class="form-group">
-                <label htmlFor="exampleAdd">Address</label>
-                <input type="text" class="form-control" id="exampleAdd"
-                value={empData.address} onChange={(e) => setEmpData({ ...empData, address: e.target.value })}/>
+                <label htmlFor="ssn">Phone</label>
+                <input type="text" class="form-control" id="phone" 
+                name="phone" value={formData.phone} onChange={handleChange}/>
             </div>
             <div class="form-group">
-                <label htmlFor="exampleID">ID</label>
-                <input type="text" class="form-control" id="exampleID"
-                value={empData.id} onChange={(e) => setEmpData({ ...empData, id: e.target.value })}/>
+                <label htmlFor="dob">Birthdate</label>
+                <input type="date" class="form-control" id="dob"
+                name="DoB" value={formData.DoB} onChange={handleChange}/>
+            </div>
+            <div class="form-group">
+                <label htmlFor="photo">Photo Link</label>
+                <input type="text" class="form-control" id="photo" 
+                name="photo" value={formData.photo} onChange={handleChange}/>
+            </div>
+            <div class="form-group">
+                <label htmlFor="com">Company</label>
+                <input type="text" class="form-control" id="com" 
+                name="company_ID" value={formData.company_ID} onChange={handleChange}/>
             </div>
             <br/>
             <button type="submit" class="btn btn-primary">Submit</button>
@@ -52,4 +82,4 @@ const EmpForm = () => {
     );
 }
 
-export default EmpForm;
+export default TraineeForm;

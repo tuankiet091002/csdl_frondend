@@ -5,7 +5,8 @@ const accessHeader = {withCredentials: true, headers: {'Access-Control-Allow-Ori
 
 export const fetchTrns = () => API.get('trainee', accessHeader);
 export const fetchTrnsBySearch = (query) => API.get(`trainee?name=${query}`,accessHeader);
-export const deleteEmp = (userID) => API.delete(`trainee/${userID}`, accessHeader);
+export const createTrn = (form) => API.post(`trainee`, form, accessHeader);
+export const deleteEmp = null;
 
 export const login = (formData) => API.post('auth/login', formData, accessHeader);
 export const logout = () => API.get('auth/logout', accessHeader)

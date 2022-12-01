@@ -1,9 +1,13 @@
 import React, { useEffect, useState } from 'react';
+import Popup from 'reactjs-popup';
+import './Form/index.css';
+
 import { useDispatch, useSelector } from 'react-redux';
 import { getTrainees, getTrnsBySearch } from "../../actions/trnsAction";
 import ReactPaginate from 'react-paginate';
 
 import Trainee from './Trainee/Trainee.js'
+import TraineeForm from './Form/TraineeForm';
 
 function Items({ currentItems }) {
     return (
@@ -83,6 +87,9 @@ const Trainees = () => {
 
     const [searchQuery, setSearchQuery] = useState({value:''})
 
+    const [open, setOpen] = useState(false);  
+    const closeForm = () => setOpen(false);
+
     useEffect(() => {
         dispatch(getTrnsBySearch(searchQuery.value));   
     }, [searchQuery])
@@ -104,7 +111,12 @@ const Trainees = () => {
                 <div class="input-group-append">
                     <span class="input-group-text"><i class="bi bi-x" role="button" onClick={clear}/></span>
                 </div>
-                <span><button type="button" class="ms-3 btn btn-primary">+ Add Trainee</button></span>
+                <span>
+                <button type="button" class="ms-3 btn btn-primary" onClick={() => setOpen(o => !o)}>+ Add Trainee</button>
+                <Popup open={open} modal onClose={closeForm}>
+                    <TraineeForm closeForm={closeForm}/>
+                </Popup>
+                </span>
         </div> 
         {!trns.length ? <div>No Trainee</div> :
             <PaginatedItems itemsPerPage={8} items={trns} />

@@ -4,7 +4,7 @@ const { BadRequestError } = require('../errors')
 
 const addTrainee  = async (req, res) => {
     const { SSN, Fname, Lname, address, phone , DoB, photo, company_ID } = req.body
-    const trainee = await Trainee.addTrainee({ SSN, Fname, Lname, address, phone ,   DoB, photo, company_ID } )
+    const trainee = await Trainee.addTrainee({ SSN, Fname, Lname, address, phone , DoB, photo, company_ID } )
     res.status(StatusCodes.CREATED).json({ msg:'Trainee was successfully added' , traineeInfo:{ SSN, Fname, Lname, address, phone , DoB, photo, company_ID }})
 }
 const getTrainees = async (req, res) => {
