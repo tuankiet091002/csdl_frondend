@@ -1,16 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { getEmps, getEmpsBySearch } from "../../actions/empsAction";
+import { getTrainees, getTrnsBySearch } from "../../actions/trnsAction";
 import ReactPaginate from 'react-paginate';
 
-import Employee from './Employee/Employee.js'
+import Trainee from './Trainee/Trainee.js'
 
 function Items({ currentItems }) {
     return (
       <>
         {currentItems &&
           currentItems.map((item) => (
-            <Employee emp={item} key={item.SSN}/>
+            <Trainee trn={item} key={item.SSN}/>
           ))}
       </>
     );
@@ -30,11 +30,8 @@ function PaginatedItems({ itemsPerPage, items }) {
   
     // Invoke when user click to request another page.
     const handlePageClick = (event) => {
-      const newOffset = (event.selected * itemsPerPage) % items.length;
-      console.log(
-        `User requested page number ${event.selected}, which is offset ${newOffset}`
-      );
-      setItemOffset(newOffset);
+        const newOffset = (event.selected * itemsPerPage) % items.length;
+        setItemOffset(newOffset);
     };
   
     return (
@@ -42,10 +39,10 @@ function PaginatedItems({ itemsPerPage, items }) {
         <table class="table">
             <thead>
                 <tr>
-                    <th scope="col">Company</th>
-                    <th scope="col">Birth</th>
                     <th scope="col">SSN</th>
-                    <th scope="col">Photo</th>
+                    <th scope="col">Name</th>
+                    <th scope="col">Phone</th>
+                    <th scope="col">Address</th>
                 </tr>
             </thead>
             <tbody>
@@ -75,41 +72,44 @@ function PaginatedItems({ itemsPerPage, items }) {
     );
   }
 
-const Employees = () => {
-    const initialState = {name: '', role: ''};
+const Trainees = () => {
     const dispatch = useDispatch();
+
 	useEffect(() => {
-		dispatch(getEmps());
+		dispatch(getTrainees());
 	}, [dispatch]);
     
-    const {emps} = useSelector((state) => state.emps);
-    const [searchQuery, setSearchQuery] = useState(initialState)
+    const {trns} = useSelector((state) => state.trns);
+
+    const [searchQuery, setSearchQuery] = useState({value:''})
 
     useEffect(() => {
-        dispatch(getEmpsBySearch(searchQuery));   
-    }, [])
+        dispatch(getTrnsBySearch(searchQuery.value));   
+    }, [searchQuery])
 
     const handleChange = (e) => {
         setSearchQuery({ ...searchQuery, [e.target.name]: e.target.value});
         
     }
     const clear = () => {
-        setSearchQuery(initialState);
+        setSearchQuery({value:''});
     }
     
     return (
     <>
-        <h1>Employees List</h1>
-        <div class="input-group mb-3" style={{width:"50vw"}}>
-        <input type="text" class="form-control" name="name" value={searchQuery.search} onChange={handleChange}/>
-            <div class="input-group-append">
-                <span class="input-group-text"><i class="bi bi-x" role="button" onClick={clear}/></span>
-            </div>
-        </div>
-        {!emps.length ? <div>No Trainee</div> :
-            <PaginatedItems itemsPerPage={8} items={emps} />
+        <p class="h1 text-center my-2">Trainees List</p>
+        <hr/>
+        <div class="input-group mb-3">
+            <input type="text" class="form-control" name="value" value={searchQuery.value} onChange={handleChange}/>
+                <div class="input-group-append">
+                    <span class="input-group-text"><i class="bi bi-x" role="button" onClick={clear}/></span>
+                </div>
+                <span><button type="button" class="ms-3 btn btn-primary">+ Add Trainee</button></span>
+        </div> 
+        {!trns.length ? <div>No Trainee</div> :
+            <PaginatedItems itemsPerPage={8} items={trns} />
         }     
     </>)
 };
 
-export default Employees;
+export default Trainees;

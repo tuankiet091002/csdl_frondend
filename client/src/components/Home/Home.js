@@ -1,9 +1,9 @@
 import React from 'react';
-import Employees from  "../Employees/Employees.js"
+import Trainees from  "../Trainees/Trainees.js"
 
 const Home = () => {
     return (
-		<Employees/>
+		<Trainees/>
     )
 }
 
