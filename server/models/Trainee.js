@@ -80,22 +80,37 @@ Trainee.getSingleTrainee = async (id) => {
         }
         const person = await connection.execute(`SELECT * FROM PERSON WHERE SSN = ${id}`);
 
-        const seasonTrainee = await connection.execute(`SELECT * FROM SeasonTrainee WHERE SSN_TRAINEE = ${id} ORDER BY syear ASC`); //
+        var seasonTrainee = await connection.execute(`SELECT * FROM SeasonTrainee WHERE SSN_TRAINEE = ${id} ORDER BY syear ASC`); //
 
-        const sstrn = await Promise.all(seasonTrainee.rows.map( async (row) => {
-            let achievement = await connection.execute(`SELECT * FROM TABLE( SUM_VOTE('${row.SYEAR}', '${id}') )`)
-            achi = await Promise.all( 
-                achievement.rows.map( async ( epRes ) => {
-                    let r = await (connection.execute(
-                        `SELECT * FROM(SELECT rownum as RANK, w.* FROM TABLE( winnersThisEpisode('${row.SYEAR}' , '${epRes.EP_NO}')) w) 
-                        WHERE ssn='${id}'`))
-                    return {...epRes , RANK: r.rows[0].RANK}
-                }
-            ) )
-            console.log(achi);
-            return {...row , ACHIEVEMENT: achi} ;
-        }));
-        return {person: person.rows , trainee: trainee.rows , seasonTrainee: sstrn}
+        seasonTrainee = await Promise.all(seasonTrainee.rows.map( async(row) => {
+            const achievement = await connection.execute(`SELECT * FROM TABLE( SUM_VOTE('${row.SYEAR}', '${id}') )`)
+            return  {...row, ACHIEVEMENT: achievement.rows}
+        }))
+
+        seasonTrainee = await Promise.all(seasonTrainee.map(
+            async (yearly) => {
+                const yearAchi = await Promise.all(yearly.ACHIEVEMENT.map(
+                    async (eply) => {
+                        const rank =  await connection.execute(
+                            `SELECT RANK FROM(SELECT rownum as RANK, w.* FROM TABLE( winnersThisEpisode('${yearly.SYEAR}' , '${eply.EP_NO}')) w) WHERE ssn='${id}'`);
+                        return {...eply, RANK: rank.rows[0]}   
+                    }
+                ))
+
+                return {...yearly, ACHIEVEMENT: yearAchi}
+            }
+        ))
+        
+
+        console.log(seasonTrainee)
+
+
+        //const achies = achievement.rows.map( async ( epRes ) => {
+         //   const r = await connection.execute(
+         //       `SELECT * FROM(SELECT rownum as RANK, w.* FROM TABLE( winnersThisEpisode('${row.SYEAR}' , '${epRes.EP_NO}')) w) WHERE ssn='${id}'`);
+          //  console.log(r.rows)    
+
+        return {person: person.rows , trainee: trainee.rows , seasonTrainee: seasonTrainee}
     } catch (error) {
         throw error
     }

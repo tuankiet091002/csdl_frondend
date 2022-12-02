@@ -45,10 +45,12 @@ const Detail = () => {
                         {
                             yearly.ACHIEVEMENT.map((ep) => {
                                 if (ep.NO_OF_VOTES) {
-                                    console.log(ep)
                                     return (
                                         <li class="list-group-item" key={ep.EP_NO}>
-                                            Get {ep.NO_OF_VOTES} votes at episode {ep.EP_NO}
+                                            { ep.RANK ?
+                                                `Được hạng ${ep.RANK.RANK} ở tập ${ep.EP_NO} với ${ep.NO_OF_VOTES} vote` :
+                                                `Dừng lại ở tập ${ep.EP_NO} với ${ep.NO_OF_VOTES} vote`
+                                            }
                                         </li>)
                                 }
                             })

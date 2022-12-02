@@ -26,7 +26,6 @@ const getTrainees = async (req, res) => {
 const getSingleTrainee = async (req, res) => {
     const {traineeID} = req.params
     const allInfoTrainee = await Trainee.getSingleTrainee(traineeID);
-    console.log(allInfoTrainee);
     res.status(StatusCodes.OK).json(allInfoTrainee)
 }
 const getAchievement = async (req, res) => {
