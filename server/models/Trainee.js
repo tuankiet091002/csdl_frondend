@@ -73,23 +73,22 @@ Trainee.getSingleTrainee = async (id) => {
         //console.log(id);
         connection = await oracledb.getConnection();
         const trainee = await connection.execute(`SELECT * FROM TRAINEE WHERE SSN = ${id}`);
-        //console.log(trainee.rows);
-        //console.log("SELECT * FROM TRAINEE WHERE SSN = ${id}");
+      
         if (trainee.rowsAffected == 0){
             return {msg:`No trainee with this id : ${id}`}
         }
         const person = await connection.execute(`SELECT * FROM PERSON WHERE SSN = ${id}`);
-        //console.log(person.rows);
+
         const seasonTrainee = await connection.execute(`SELECT * FROM SeasonTrainee WHERE SSN_TRAINEE = ${id} ORDER BY syear ASC`); //
-        //console.log(seasonTrainee.rows);
-        // seasonTrainee.rows.map( async (row)=>{
-        //     console.log(row);
-        //     let achievement = await connection.execute(`SELECT * FROM TABLE( SUM_VOTE(${row.SYEAR}, ${id}) )`)
-        //     console.log(achievement.rows);
-        //     console.log ({...row ,achievement: achievement.rows}) ;
-            
-        // })
-        return {person: person.rows , trainee: trainee.rows , seasonTrainee: seasonTrainee.rows}
+
+        const sstrn = await Promise.all(seasonTrainee.rows.map( async (row) => {
+            let achievement = await connection.execute(`SELECT * FROM TABLE( SUM_VOTE('${row.SYEAR}', '${id}') )`)
+            console.log(achievement.rows);
+            return {...row , ACHIEVEMENT: achievement.rows} ;
+        }));
+        console.log(sstrn);
+
+        return {person: person.rows , trainee: trainee.rows , seasonTrainee: sstrn}
     } catch (error) {
         throw error
     }
@@ -103,11 +102,11 @@ Trainee.getSingleTrainee = async (id) => {
         }
     }
 };
-Trainee.getAchievement=async (id, {year}) =>{
+Trainee.getAchievement = async (id, {year}) =>{
     try {
         connection = await oracledb.getConnection();
-        let achievement = await connection.execute(`SELECT * FROM TABLE( SUM_VOTE(${year}, ${id}) )`)
-       
+        let achievement = await connection.execute(`SELECT * FROM TABLE ( SUM_VOTE(${year}, ${id}) )`)
+        console.log(achievement)
         if(achievement.rows.length===0){
             return {msg:"Trainee doesn't join this year"}
         }

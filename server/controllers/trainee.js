@@ -25,19 +25,21 @@ const getTrainees = async (req, res) => {
 
 const getSingleTrainee = async (req, res) => {
     const {traineeID} = req.params
-    const allInfoTrainee = await Trainee.getSingleTrainee(traineeID)
+    const allInfoTrainee = await Trainee.getSingleTrainee(traineeID);
+    console.log(allInfoTrainee);
     res.status(StatusCodes.OK).json(allInfoTrainee)
 }
 const getAchievement = async (req, res) => {
-    const {traineeID}= req.params
-    let {year} = req.query
+    const { traineeID }= req.params
+    let { year } = req.query
     const achievementOfTrainee = await Trainee.getAchievement(traineeID, {year})
+    
     res.status(StatusCodes.OK).json(achievementOfTrainee)
 }
 
 module.exports = {
-  addTrainee,
-  getTrainees,
-  getSingleTrainee,
-  getAchievement
+    addTrainee,
+    getTrainees,
+    getSingleTrainee,
+    getAchievement
 }

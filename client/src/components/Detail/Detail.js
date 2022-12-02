@@ -3,7 +3,7 @@ import React, { useEffect } from 'react';
 
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
-import {  getTrnById } from "../../actions/trnsAction";
+import {  getTrnById, getTrnAchi } from "../../actions/trnsAction";
 
 
 
@@ -40,7 +40,7 @@ const Detail = () => {
                     </div>
                 </div>
                 <div class="card-block collapse" id="exp1">
-                    <h5> Thí sinh</h5>
+                    <p class="h5">Thí sinh</p>
                     <p>
                         Thông tin từng năm vào đây.
                     </p>

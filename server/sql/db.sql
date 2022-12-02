@@ -1192,5 +1192,6 @@ END;
 -- insert into stageincludetrainee values (2020, 5, 4, '529511218687', 1, 1);
 -- insert into stageincludetrainee values (2020, 5, 4, '164287459396', 1, 1);
 -- insert into stageincludetrainee values (2020, 5, 4, '844687021716', 1, 1);
+
 --------------------------------------------------------------------------------
 

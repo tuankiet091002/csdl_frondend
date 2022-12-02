@@ -11,15 +11,6 @@ export const getTrainees = () => async (dispatch) => {
   	}
 };
 
-export const deleteTrn = (id) => async (dispatch) => {
-	try {
-		await api.deleteEmp(id);
-		dispatch({ type: DELETE, payload: id });
-		
-	} catch (error) {
-		console.log(error.message);
-	}
-};
 
 export const getTrnsBySearch = (searchQuery) => async (dispatch) => {
 	try {
@@ -33,6 +24,7 @@ export const getTrnsBySearch = (searchQuery) => async (dispatch) => {
 export const getTrnById = (id) => async (dispatch) => {
     try {
         const { data } = await api.fetchTrnById(id);
+        console.log(data)
         dispatch({type: FETCH_BY_ID, payload: data })
     } catch (error) {
         console.log(error);

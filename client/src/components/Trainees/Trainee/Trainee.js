@@ -8,7 +8,7 @@ const Trainee = ({trn}) => {
     const navigate = useNavigate();
 
     const handleDelete = () => {
-        dispatch(deleteTrn(trn._id));
+        pass
     }
 
     const goDetail = () => {
