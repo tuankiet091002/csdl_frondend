@@ -24,7 +24,6 @@ export const getTrnsBySearch = (searchQuery) => async (dispatch) => {
 export const getTrnById = (id) => async (dispatch) => {
     try {
         const { data } = await api.fetchTrnById(id);
-        console.log(data)
         dispatch({type: FETCH_BY_ID, payload: data })
     } catch (error) {
         console.log(error);

@@ -68,12 +68,13 @@ Trainee.getTrainees = async ({name}) => {
     }
 };
 
+
 Trainee.getSingleTrainee = async (id) => {
     try {
         //console.log(id);
         connection = await oracledb.getConnection();
         const trainee = await connection.execute(`SELECT * FROM TRAINEE WHERE SSN = ${id}`);
-      
+     
         if (trainee.rowsAffected == 0){
             return {msg:`No trainee with this id : ${id}`}
         }
@@ -83,11 +84,17 @@ Trainee.getSingleTrainee = async (id) => {
 
         const sstrn = await Promise.all(seasonTrainee.rows.map( async (row) => {
             let achievement = await connection.execute(`SELECT * FROM TABLE( SUM_VOTE('${row.SYEAR}', '${id}') )`)
-            console.log(achievement.rows);
-            return {...row , ACHIEVEMENT: achievement.rows} ;
+            achi = await Promise.all( 
+                achievement.rows.map( async ( epRes ) => {
+                    let r = await (connection.execute(
+                        `SELECT * FROM(SELECT rownum as RANK, w.* FROM TABLE( winnersThisEpisode('${row.SYEAR}' , '${epRes.EP_NO}')) w) 
+                        WHERE ssn='${id}'`))
+                    return {...epRes , RANK: r.rows[0].RANK}
+                }
+            ) )
+            console.log(achi);
+            return {...row , ACHIEVEMENT: achi} ;
         }));
-        console.log(sstrn);
-
         return {person: person.rows , trainee: trainee.rows , seasonTrainee: sstrn}
     } catch (error) {
         throw error
@@ -102,6 +109,7 @@ Trainee.getSingleTrainee = async (id) => {
         }
     }
 };
+
 Trainee.getAchievement = async (id, {year}) =>{
     try {
         connection = await oracledb.getConnection();

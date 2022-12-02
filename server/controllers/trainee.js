@@ -30,7 +30,7 @@ const getSingleTrainee = async (req, res) => {
     res.status(StatusCodes.OK).json(allInfoTrainee)
 }
 const getAchievement = async (req, res) => {
-    const { traineeID }= req.params
+    const { traineeID } = req.params
     let { year } = req.query
     const achievementOfTrainee = await Trainee.getAchievement(traineeID, {year})
     

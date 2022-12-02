@@ -32,18 +32,29 @@ const Detail = () => {
     <section id="exp" class="container">
         <h1>Experience</h1>
         {strn.seasonTrainee.map((yearly) => 
-            <div class="card">
+            <div class="card px-3" key={yearly.SYEAR}>
                 <div class="card-header collapse show" data-bs-toggle="collapse" data-bs-target="#exp1">
                     <div class="row">
                         <h5 class="col-10">Trainee year {yearly.SYEAR}</h5>
-                        <em class="col-2">Apr 2012 - Current</em>
+                        <em class="col-2">2021 - Current</em>
                     </div>
                 </div>
-                <div class="card-block collapse" id="exp1">
-                    <p class="h5">Thí sinh</p>
-                    <p>
-                        Thông tin từng năm vào đây.
-                    </p>
+                <div class="card-text collapse" id="exp1">
+                    <div class="card-body p-0">
+                    <ul class="list-group list-group-flush">
+                        {
+                            yearly.ACHIEVEMENT.map((ep) => {
+                                if (ep.NO_OF_VOTES) {
+                                    console.log(ep)
+                                    return (
+                                        <li class="list-group-item" key={ep.EP_NO}>
+                                            Get {ep.NO_OF_VOTES} votes at episode {ep.EP_NO}
+                                        </li>)
+                                }
+                            })
+                        }
+                    </ul>
+                    </div>
                 </div>
             </div>
         )}
