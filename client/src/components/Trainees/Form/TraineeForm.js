@@ -5,9 +5,10 @@ import {createTrainee} from "../../../actions/trnsAction";
 
 const TraineeForm = ({closeForm}) => {    
     const dispatch = useDispatch();
-
+    
     const initialState = {SSN: '', Fname: '', Lname: '', address: '', 
                         phone: '', DoB: '', photo: '', company_ID: ''}
+
     const [formData, setForm] = useState(initialState);
     
     
@@ -15,16 +16,15 @@ const TraineeForm = ({closeForm}) => {
         e.preventDefault();
         const t = new Date(formData.DoB);
         dispatch(createTrainee({...formData, DoB: t.toLocaleDateString('vi-VN')}));
-        clear();
+        clearForm();
         closeForm();
-        
     }
 
     const handleChange = (e) => {
-        setForm({...formData, [e.target.name]: e.target.value});
+        setForm({...formData, [e.target.name]: e.target.value || e.value});
     }
 
-    const clear = () => {
+    const clearForm = () => {
         setForm(initialState);
     };
 
@@ -71,12 +71,18 @@ const TraineeForm = ({closeForm}) => {
             </div>
             <div class="form-group">
                 <label htmlFor="com">Company</label>
-                <input type="text" class="form-control" id="com" 
-                name="company_ID" value={formData.company_ID} onChange={handleChange}/>
+                <select class="form-control" id="com" 
+                name="company_ID" onChange={handleChange}>
+                    <option></option>
+                    <option value="C465">Eco Focus</option>
+                    <option value="C932">Innovation Arch</option>
+                    <option value="C423">Strat Security</option>
+                    <option value="C254">Inspire Fitness Co</option>
+                </select>
             </div>
             <br/>
             <button type="submit" class="btn btn-primary">Submit</button>
-            <button type="clear" class="btn btn-danger mx-3" onCLick={clear}>Clear</button>
+            <button type="reset" class="btn btn-danger mx-3" onClick={clearForm}>Clear</button>
         </form>
     </>
     );

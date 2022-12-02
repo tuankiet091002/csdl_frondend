@@ -3,7 +3,7 @@ import Popup from 'reactjs-popup';
 import './Form/index.css';
 
 import { useDispatch, useSelector } from 'react-redux';
-import { getTrainees, getTrnsBySearch } from "../../actions/trnsAction";
+import { getTrainees, getTrnsBySearch, getTrnById } from "../../actions/trnsAction";
 import ReactPaginate from 'react-paginate';
 
 import Trainee from './Trainee/Trainee.js'
@@ -47,6 +47,7 @@ function PaginatedItems({ itemsPerPage, items }) {
                     <th scope="col">Name</th>
                     <th scope="col">Phone</th>
                     <th scope="col">Address</th>
+                    <th scope="col"></th>
                 </tr>
             </thead>
             <tbody>
@@ -74,7 +75,7 @@ function PaginatedItems({ itemsPerPage, items }) {
         />
       </>
     );
-  }
+}
 
 const Trainees = () => {
     const dispatch = useDispatch();

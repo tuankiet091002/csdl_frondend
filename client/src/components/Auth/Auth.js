@@ -28,7 +28,7 @@ const Auth = () => {
     }
 
     return (
-    <form style={{width:"50vw"}} onSubmit={handleSubmit}>
+    <form  onSubmit={handleSubmit}>
         <h1>Sign in</h1>
         <div class="form-group">
             <label htmlFor="#username">Username</label>

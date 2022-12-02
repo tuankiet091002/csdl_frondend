@@ -22,7 +22,7 @@ const login = async (req, res) => {
   
   attachCookiesToResponse({ res, user: {id:12345678 , role:'admin'} });
 
-  res.status(StatusCodes.OK).json({ msg: 'Login successful!' ,user: {id:12345678 , role:'admin'} });
+  res.status(StatusCodes.OK).json({ msg: 'Login successful!' ,user: {id:12345678 , role:'admin', name: 'Kiệt Tú Ông'} });
 };
 
 const logout = async (req, res) => {
