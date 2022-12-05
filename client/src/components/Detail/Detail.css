@@ -1,0 +1,44 @@
+*{
+    padding:0;
+    margin:0;
+    box-sizing: border-box;
+
+}
+body{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+#detail{
+    margin-left: auto;
+    margin-right: auto;
+    justify-content: center;
+    align-items: center;
+    width: 400px ;
+    max-height: 1000px;
+    border-radius: 10px;
+    background: linear-gradient(pink,rgb(241, 11, 191));
+}
+#detail .ssn_img{
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    border: 5px solid rgb(186, 235, 249);
+    position: relative;
+    margin-left: 100px;
+    margin-right: auto;
+}
+#detail h1{
+    text-align: center;
+}
+.inf{
+    color: aliceblue;
+    text-align: center;
+}
+.ex{
+    text-align: center;
+}
+#exp{
+    color: aliceblue;
+}

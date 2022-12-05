@@ -35,6 +35,6 @@ export const createTrainee = (formData) => async (dispatch) => {
 		const { data } = await api.createTrn(formData);
 		dispatch({ type: CREATE, payload: data });
 	} catch (error) {
-	  	console.log(error);
+	  	return Promise.reject(error);
 	}
 };

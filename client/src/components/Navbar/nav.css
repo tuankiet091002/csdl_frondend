@@ -1,0 +1,22 @@
+@font-face {
+    font-family: "Roboto";
+    src: url(/src/components/Roboto/Roboto-Regular.ttf);
+}
+.header-area .main-menu .navbar .navbar-brand{
+    padding: 0 2rem 0 5rem;
+}
+.header-area .main-menu .navbar{
+    padding: 1rem 10rem auto;
+}
+#lg{
+    max-width: 100px;
+}
+.nav-link{
+    font-family: "Roboto", cursive;
+    text-transform: uppercase;
+}
+.header-area .main-menu .navbar a:hover{
+    color:rgb(247, 113, 187);
+
+}
+

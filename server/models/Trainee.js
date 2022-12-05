@@ -38,18 +38,18 @@ Trainee.getTrainees = async ({name}) => {
         connection = await oracledb.getConnection();
         let searchString = 
         `SELECT Trainee.SSN , Fname , Lname , address, phone
-        FROM Person
-        INNER JOIN Trainee
-        ON Person.SSN = Trainee.SSN
+        FROM blackpink.Person
+        INNER JOIN blackpink.Trainee
+        ON blackpink.Person.SSN = blackpink.Trainee.SSN
         `
         if ( name.length=== 1){
             searchString = searchString +
-            ` WHERE LOWER(Person.Fname) LIKE LOWER('%${name[0]}%') OR LOWER(Person.Lname) LIKE LOWER('%${name[0]}%')`
+            ` WHERE LOWER(blackpink.Person.Fname) LIKE LOWER('%${name[0]}%') OR LOWER(blackpink.Person.Lname) LIKE LOWER('%${name[0]}%')`
         }
         if ( name.length=== 2){
             searchString = searchString +
-            ` WHERE (LOWER(Person.Fname) LIKE LOWER('%${name[0]}%') AND LOWER(Person.Lname) LIKE LOWER('%${name[1]}%'))
-            OR (LOWER(Person.Fname) LIKE LOWER('%${name[1]}%') AND LOWER(Person.Lname) LIKE LOWER('%${name[0]}%'))`
+            ` WHERE (LOWER(blackpink.Person.Fname) LIKE LOWER('%${name[0]}%') AND LOWER(blackpink.Person.Lname) LIKE LOWER('%${name[1]}%'))
+            OR (LOWER(blackpink.Person.Fname) LIKE LOWER('%${name[1]}%') AND LOWER(blackpink.Person.Lname) LIKE LOWER('%${name[0]}%'))`
         }
         searchString = searchString + ` ORDER BY SSN ASC`
         const trainees = await connection.execute(searchString);
@@ -73,17 +73,17 @@ Trainee.getSingleTrainee = async (id) => {
     try {
         //console.log(id);
         connection = await oracledb.getConnection();
-        const trainee = await connection.execute(`SELECT * FROM TRAINEE WHERE SSN = ${id}`);
+        const trainee = await connection.execute(`SELECT * FROM blackpink.TRAINEE WHERE SSN = ${id}`);
      
         if (trainee.rowsAffected == 0){
             return {msg:`No trainee with this id : ${id}`}
         }
-        const person = await connection.execute(`SELECT * FROM PERSON WHERE SSN = ${id}`);
+        const person = await connection.execute(`SELECT * FROM blackpink.PERSON WHERE SSN = ${id}`);
 
-        var seasonTrainee = await connection.execute(`SELECT * FROM SeasonTrainee WHERE SSN_TRAINEE = ${id} ORDER BY syear ASC`); //
+        var seasonTrainee = await connection.execute(`SELECT * FROM blackpink.SeasonTrainee WHERE SSN_TRAINEE = ${id} ORDER BY syear ASC`); //
 
         seasonTrainee = await Promise.all(seasonTrainee.rows.map( async(row) => {
-            const achievement = await connection.execute(`SELECT * FROM TABLE( SUM_VOTE('${row.SYEAR}', '${id}') )`)
+            const achievement = await connection.execute(`SELECT * FROM TABLE( blackpink.SUM_VOTE('${row.SYEAR}', '${id}') )`)
             return  {...row, ACHIEVEMENT: achievement.rows}
         }))
 
@@ -92,7 +92,7 @@ Trainee.getSingleTrainee = async (id) => {
                 const yearAchi = await Promise.all(yearly.ACHIEVEMENT.map(
                     async (eply) => {
                         const rank =  await connection.execute(
-                            `SELECT RANK FROM(SELECT rownum as RANK, w.* FROM TABLE( winnersThisEpisode('${yearly.SYEAR}' , '${eply.EP_NO}')) w) WHERE ssn='${id}'`);
+                            `SELECT RANK FROM(SELECT rownum as RANK, w.* FROM TABLE( blackpink.winnersThisEpisode('${yearly.SYEAR}' , '${eply.EP_NO}')) w) WHERE ssn='${id}'`);
                         return {...eply, RANK: rank.rows[0]}   
                     }
                 ))
@@ -100,16 +100,6 @@ Trainee.getSingleTrainee = async (id) => {
                 return {...yearly, ACHIEVEMENT: yearAchi}
             }
         ))
-        
-
-        console.log(seasonTrainee)
-
-
-        //const achies = achievement.rows.map( async ( epRes ) => {
-         //   const r = await connection.execute(
-         //       `SELECT * FROM(SELECT rownum as RANK, w.* FROM TABLE( winnersThisEpisode('${row.SYEAR}' , '${epRes.EP_NO}')) w) WHERE ssn='${id}'`);
-          //  console.log(r.rows)    
-
         return {person: person.rows , trainee: trainee.rows , seasonTrainee: seasonTrainee}
     } catch (error) {
         throw error
@@ -128,7 +118,7 @@ Trainee.getSingleTrainee = async (id) => {
 Trainee.getAchievement = async (id, {year}) =>{
     try {
         connection = await oracledb.getConnection();
-        let achievement = await connection.execute(`SELECT * FROM TABLE ( SUM_VOTE(${year}, ${id}) )`)
+        let achievement = await connection.execute(`SELECT * FROM TABLE ( blackpink.SUM_VOTE(${year}, ${id}) )`)
         console.log(achievement)
         if(achievement.rows.length===0){
             return {msg:"Trainee doesn't join this year"}

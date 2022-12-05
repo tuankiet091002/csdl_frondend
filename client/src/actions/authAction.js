@@ -5,7 +5,7 @@ export const login = (formData, router) => async (dispatch) => {
   	try {
     	const a = await api.login(formData);
     	dispatch({ type: AUTH, payload: a.data });
-    	router('/');
+    	router('/home');
   	} catch (error) {
         return Promise.reject(error)
   	}

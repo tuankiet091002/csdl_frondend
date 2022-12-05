@@ -1,0 +1,47 @@
+#popu{
+    background-color: rgb(253, 255, 255);
+    border-bottom-left-radius: none;
+    border-bottom-right-radius:none;
+    border-top-left-radius:none ;
+    border-top-right-radius:none;
+    box-shadow:none;
+}
+
+.form-group{
+    position: relative;
+}
+.form-group input{
+    width: 100%;
+    padding: 10px;
+    outline: 0;
+    border: 1px solid rgb(239, 173, 245);
+    color: black;
+    background:transparent;
+    font-size: 15px;
+}
+label{
+    color: rgb(246, 94, 200);
+}
+.form-group span{
+    position: absolute;
+    transition: 0,5s;
+    left:10px;
+    bottom: 10px;
+    pointer-events: none;
+    color: rgb(246, 94, 200);
+}
+
+
+form .form-group input:focus~span,
+form .form-group input:valid~span{
+    transform: translateY(-35px);
+    font-size: 10px;
+}
+form .form-group select:focus~span,
+form .form-group select:valid~span{
+    transform: translateY(-30px);
+    font-size: 10px;
+}
+form .but{
+    margin-left: 50px;
+}
