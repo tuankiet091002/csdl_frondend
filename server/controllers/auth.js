@@ -19,10 +19,8 @@ const login = async (req, res) => {
   if (!isPasswordCorrect) {
     throw new UnauthenticatedError('Password is wrong');
   }
-  
   attachCookiesToResponse({ res, user: {id:12345678 , role:'admin'} });
-
-  res.status(StatusCodes.OK).json({ msg: 'Login successful!' ,user: {id:12345678 , role:'admin', name: 'Kiệt Tú Ông'} });
+  res.status(StatusCodes.OK).json({ msg: 'Login successful!' ,user: {id:12345678 , role:'admin', name: 'PhQuiet'} });
 };
 
 const logout = async (req, res) => {

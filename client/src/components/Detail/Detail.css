@@ -21,13 +21,13 @@ body{
     background: linear-gradient(pink,rgb(241, 11, 191));
 }
 #detail .ssn_img{
-    width: 200px;
-    height: 200px;
+    width: 230px;
+    height: 230px;
     border-radius: 50%;
     border: 5px solid rgb(186, 235, 249);
-    position: relative;
     margin-left: 100px;
     margin-right: auto;
+    position: relative;
 }
 #detail h1{
     text-align: center;

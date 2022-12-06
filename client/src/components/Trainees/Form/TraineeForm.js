@@ -36,7 +36,7 @@ const TraineeForm = ({closeForm}) => {
 
     return (
     <>
-    <section class="Form2">
+    <div class="Form2">
         <p class="h2 text-center">Trainee's Information</p>
         <form autoComplete='off' onSubmit={handleSubmit}>
             <div id="popu" class="row">
@@ -101,7 +101,7 @@ const TraineeForm = ({closeForm}) => {
         
         
         </form>
-    </section>
+    </div>
     </>
     );
 }

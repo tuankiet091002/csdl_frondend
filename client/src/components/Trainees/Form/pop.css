@@ -5,6 +5,7 @@
     border-top-left-radius:none ;
     border-top-right-radius:none;
     box-shadow:none;
+    height: fit-content;
 }
 
 .form-group{
@@ -44,4 +45,7 @@ form .form-group select:valid~span{
 }
 form .but{
     margin-left: 50px;
+}
+.h2{
+    font-family:'Courier New', Courier, monospace;
 }

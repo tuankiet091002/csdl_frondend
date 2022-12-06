@@ -8,12 +8,12 @@ Trainee.addTrainee = async ({ SSN, Fname, Lname, address, phone , DoB, photo, co
         connection = await oracledb.getConnection();
         const a=await connection.execute(`ALTER SESSION SET NLS_DATE_FORMAT = 'DD/MM/YYYY'`);
         const person = await connection.execute(
-            `INSERT INTO Person VALUES
+            `INSERT INTO blackpink.Person VALUES
             (:SSN, :Fname, :Lname, :phone, :address)`,
             [SSN , Fname , Lname , phone, address]
         );
         const trainee = await connection.execute(
-            `INSERT INTO Trainee VALUES
+            `INSERT INTO blackpink.Trainee VALUES
             (:SSN, :DoB, :photo, :company_ID)`,
             [SSN , DoB , photo , company_ID]
         );
@@ -44,12 +44,15 @@ Trainee.getTrainees = async ({name}) => {
         `
         if ( name.length=== 1){
             searchString = searchString +
-            ` WHERE LOWER(blackpink.Person.Fname) LIKE LOWER('%${name[0]}%') OR LOWER(blackpink.Person.Lname) LIKE LOWER('%${name[0]}%')`
+            ` WHERE LOWER(blackpink.Person.Fname) LIKE LOWER('%${name[0]}%') OR 
+              LOWER(blackpink.Person.Lname) LIKE LOWER('%${name[0]}%')`
         }
         if ( name.length=== 2){
             searchString = searchString +
-            ` WHERE (LOWER(blackpink.Person.Fname) LIKE LOWER('%${name[0]}%') AND LOWER(blackpink.Person.Lname) LIKE LOWER('%${name[1]}%'))
-            OR (LOWER(blackpink.Person.Fname) LIKE LOWER('%${name[1]}%') AND LOWER(blackpink.Person.Lname) LIKE LOWER('%${name[0]}%'))`
+            ` WHERE (LOWER(blackpink.Person.Fname) LIKE LOWER('%${name[0]}%') AND 
+              LOWER(blackpink.Person.Lname) LIKE LOWER('%${name[1]}%')) OR 
+              (LOWER(blackpink.Person.Fname) LIKE LOWER('%${name[1]}%') AND 
+              LOWER(blackpink.Person.Lname) LIKE LOWER('%${name[0]}%'))`
         }
         searchString = searchString + ` ORDER BY SSN ASC`
         const trainees = await connection.execute(searchString);
@@ -79,11 +82,11 @@ Trainee.getSingleTrainee = async (id) => {
             return {msg:`No trainee with this id : ${id}`}
         }
         const person = await connection.execute(`SELECT * FROM blackpink.PERSON WHERE SSN = ${id}`);
-
-        var seasonTrainee = await connection.execute(`SELECT * FROM blackpink.SeasonTrainee WHERE SSN_TRAINEE = ${id} ORDER BY syear ASC`); //
-
+        var seasonTrainee = await connection.execute(`SELECT * FROM blackpink.SeasonTrainee 
+                                                    WHERE SSN_TRAINEE = ${id} ORDER BY syear ASC`); 
         seasonTrainee = await Promise.all(seasonTrainee.rows.map( async(row) => {
-            const achievement = await connection.execute(`SELECT * FROM TABLE( blackpink.SUM_VOTE('${row.SYEAR}', '${id}') )`)
+            const achievement = await connection.execute(`SELECT * 
+                                                        FROM TABLE( blackpink.SUM_VOTE('${row.SYEAR}', '${id}') )`)
             return  {...row, ACHIEVEMENT: achievement.rows}
         }))
 
@@ -92,11 +95,12 @@ Trainee.getSingleTrainee = async (id) => {
                 const yearAchi = await Promise.all(yearly.ACHIEVEMENT.map(
                     async (eply) => {
                         const rank =  await connection.execute(
-                            `SELECT RANK FROM(SELECT rownum as RANK, w.* FROM TABLE( blackpink.winnersThisEpisode('${yearly.SYEAR}' , '${eply.EP_NO}')) w) WHERE ssn='${id}'`);
+                            `SELECT RANK FROM(SELECT rownum as RANK, w.* 
+                             FROM TABLE( blackpink.winnersThisEpisode('${yearly.SYEAR}' , '${eply.EP_NO}')) w) 
+                             WHERE ssn='${id}'`);
                         return {...eply, RANK: rank.rows[0]}   
                     }
                 ))
-
                 return {...yearly, ACHIEVEMENT: yearAchi}
             }
         ))
@@ -114,6 +118,7 @@ Trainee.getSingleTrainee = async (id) => {
         }
     }
 };
+
 
 Trainee.getAchievement = async (id, {year}) =>{
     try {
